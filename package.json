@@ -1,0 +1,29 @@
+{
+  "name": "oasis",
+  "version": "1.0.0",
+  "description": "a photosharing social media application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michgboxy2/Oasis.git"
+  },
+  "author": "Elufioye Michael",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michgboxy2/Oasis/issues"
+  },
+  "homepage": "https://github.com/michgboxy2/Oasis#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
+    "graphql": "^14.0.2",
+    "mongoose": "^5.3.0",
+    "morgan": "^1.9.1"
+  }
+}
