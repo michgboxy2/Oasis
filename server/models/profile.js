@@ -64,3 +64,15 @@ ProfileSchema.statics.FollowMe = function(id, next){  //getting followed and unf
 
     }, (err) => {return next(err);})
 }
+
+ProfileSchema.statics.getFollowers = function(id){
+    return this.findById(id)
+    .populate('followers')
+    .then(profile => profile.followers);
+}
+
+ProfileSchema.statics.getFollowing = function(id){
+    return this.findById(id)
+    .populate('following')
+    .then(profile => profile.followers);
+}
