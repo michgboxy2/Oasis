@@ -1,16 +1,17 @@
 const mongoose = require('mongoose'),
-      Profile  = mongoose.model('profile');
+      Profile  = mongoose.model('profile'),
       User     = mongoose.model('user');
 
 
 
 
-exports.AddProfile = (bio, userID) => {
-    const profile = new Profile({bio,
+exports.AddProfile = (userID, bio) => {
+    const profile = new Profile({
         user: userID});
 
-    if(!bio) throw new Error("input Bio");
-    return profile.save();
+    return profile.save().then(profile => {
+        return profile;
+    });
 }
 
 exports.getUserProfile = (id) => {
@@ -23,3 +24,26 @@ exports.getAllProfiles = () => {
         return data;
     }, (err) => { throw err;})
 }
+
+exports.getFollowList = (id) => {
+   return Profile.findOne({user : id})
+   .populate('following')
+   .then(profile => {
+        if(!profile){ return new Error("user does not exist")};
+        console.log(profile);
+        return profile.following;
+    }
+    )
+}
+
+
+exports.getFollowersList = (id) => {
+    return Profile.findOne({user : id})
+    .populate('followers')
+    .then(profile => {
+         if(!profile){ return new Error("user does not exist")};
+         console.log(profile.followers);
+         return profile.followers;
+     }
+     )
+ }
