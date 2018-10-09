@@ -2,7 +2,9 @@ const graphql  = require('graphql');
 const { GraphQLObjectType, GraphQLID, GraphQLList, GraphQLNonNull}   = graphql;
 const UserType = require('./user_type');
 const ProfileType = require('./profile_types');
+const FollowType  = require('./followsType');
 const profileController = require('../../services/profileController');
+const FollowController  = require('../../services/followsController');
 const AuthController    = require('../../services/authController');
 const mongoose          = require('mongoose');
 const Users             = mongoose.model('user');
@@ -46,6 +48,17 @@ const RootQueryType = new GraphQLObjectType({
             resolve(parentValue, args, context){
                 const userId = utils.getUserId(context);
                 return profileController.getUserProfile(userId);
+            }
+        },
+
+        followings: {
+            type: new GraphQLList(FollowType),
+            resolve(parentValue, args, context){
+                const userId = utils.getUserId(context);
+                // return FollowController.getFollowings(userId);
+                return profileController.getFollowList(userId).then(user => {
+                    return user.following;
+                })
             }
         }
 

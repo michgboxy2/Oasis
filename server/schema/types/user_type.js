@@ -1,31 +1,26 @@
-const mongoose = require('mongoose'),
-      graphql  = require('graphql'),
+const graphql  =  require('graphql');
+const {
+    GraphQLObjectType,
+    GraphQLID,
+    GraphQLString
+} = graphql;
 
-      {GraphQLObjectType, GraphQLID, GraphQLString }       = graphql;
+const profileController = require('../../services/profileController');
 
-    const User = mongoose.model("user");
-    const Profile = mongoose.model('profile');
+const UserType = new GraphQLObjectType({
+    name: 'UserType',
+    fields: () => ({
+        id: { type: GraphQLID },
+        username: { type : GraphQLString },
+        token:{type : GraphQLString},
+        profile:{
+            type: require('./profile_types'),
+            resolve(parentValue, args, context){
+                return profileController.getUserProfile(parentValue.id);
+            }
+        }
 
-      const UserType = new GraphQLObjectType({
-          name : "UserType",
-          fields: () => ({
-              id : {type : GraphQLID },
-              username: {type : GraphQLString },
-              profile : {
-                  type: require('./profile_type'),
-                  resolve(parentValue){
-                      return User.findById(parentValue).populate('profile')
-                      .then(user => {
-                          return user.profile
-                      });
-
-
-                  }
-              }
-          })
-      })
+    })
+});
 
 module.exports = UserType;
-      
-
-
