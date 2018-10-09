@@ -1,36 +1,36 @@
-const bcrypt = require('bcrypt-nodejs'),
-      mongoose = require('mongoose'),
-      Schema   = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema   = mongoose.Schema;
+const bcrypt   = require('bcrypt-nodejs');
 
-
-const User = new Schema({
-      username : {type : String, required : "Enter your username",unique: true },
-      password: {type: String, required : "Enter Password"},
-      profile: {type : Schema.Types.ObjectId, ref: 'profile'}
+const UserSchema = new Schema({
+    username: { type : String, required: true, unique: true},
+    password: {type : String, required: true, unique: true}
 });
 
-User.pre('save', function(next){
-      this.password = this.encryptPassword(this.password);
-      next();
+UserSchema.pre('save', function(next){
+    this.password = this.encryptPassword(this.password);
+    next();
 });
 
-User.methods = {
-      authenticate : function(plaintext){
-            return bcrypt.compareSync(plaintext, this.password);
-      },
+UserSchema.methods = {
+    authenticate : function(plaintext){
+        return bcrypt.compareSync(plaintext, this.password);
+    },
 
-      encryptPassword : (plaintext) => {
-            if(!plaintext){ return next(new Error({message : "Enter credentials"}));}
-            
-            var salt = bcrypt.genSaltSync();
-            
-            return bcrypt.hashSync(plaintext, salt);
-      }
-};
+    encryptPassword : (plaintext) => {
+        if(!plaintext){ return next(new Error("please enter username or password"));}
 
-// User.statics.getProfile = function(id){
-//       return this.findById(id)
-//       .populate('profile')
-// }
+        var salt = bcrypt.genSaltSync();
 
-mongoose.model("user", User);
+        return bcrypt.hashSync(plaintext, salt);
+
+    }
+}
+
+// UserSchema.virtual('followings', {
+//     ref: 'following',
+//     localField: 'id',
+//     foreignField: 'user'
+// })
+
+mongoose.model('user', UserSchema);
