@@ -6,9 +6,9 @@ const mongoose =  require('mongoose'),
           user: {
               type: Schema.Types.ObjectId, ref: 'user'
           },
-          following: [{
+          following: {
                type: Schema.Types.ObjectId, ref: 'user'
-          }] 
+          }
       });
 
 
